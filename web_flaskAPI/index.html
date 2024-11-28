@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Classification</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .upload-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .upload-container input[type="file"] {
+            display: none;
+        }
+
+        .upload-label {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .upload-label:hover {
+            background-color: #45a049;
+        }
+
+        .preview {
+            margin: 1rem 0;
+        }
+
+        .preview img {
+            max-width: 100%;
+            max-height: 200px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .upload-container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}?v={{ version }}">
+<script src="{{ url_for('static', filename='script.js') }}?v={{ version }}"></script>
+</head>
+<body>
+    <header>
+        <h1>Image Classification</h1>
+        <p>Upload an image and let our AI classify it for you!</p>
+    </header>
+    <main>
+        <div class="upload-container">
+            <form action="/predict" method="post" enctype="multipart/form-data" id="uploadForm">
+                <label for="fileUpload" class="upload-label">Choose Image</label>
+                <input type="file" name="file" id="fileUpload" accept="image/*" required>
+                <div class="preview" id="previewContainer">
+                    <p>No image selected.</p>
+                </div>
+                <button type="submit">Upload and Classify</button>
+            </form>
+        </div>
+    </main>
+    <footer>
+        &copy; 2024 AI Image Classifier. All rights reserved.
+    </footer>
+    <script>
+        const fileInput = document.getElementById('fileUpload');
+        const previewContainer = document.getElementById('previewContainer');
+
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewContainer.innerHTML = `<img src="${e.target.result}" alt="Image Preview">`;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                previewContainer.innerHTML = '<p>No image selected.</p>';
+            }
+        });
+    </script>
+</body>
+</html>
